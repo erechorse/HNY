@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <title>Happy New Year</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="node_modules/c3/c3.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>
+            感染症シミュレータ🦠
+        </h1>
+    </header>
+
+    <h1>
+        Intro:これは何
+    </h1>
+
+    <p>
+        新型コロナウイルスの感染拡大抑止を目指し，皆さんに行動変容のきっかけとしてもらうため，どのように感染症が広がるのかを再現する簡単なシミュレータを作成しました．
+    </p>
+
+    <p>
+        (素人が作っていますので，予定外の操作をされるとぶっ壊れます．表示がおかしくなった時はこのページをリロードしてください．)
+    </p>
+
+    <h1>
+        1.　とりあえず触ってみる
+    </h1>
+
+    <h2>
+        1.1.　Less Is More
+    </h2>
+
+    <p>
+        まず，もっとも簡単なモデルで試してみましょう．この下にあるボードは，我々の住んでいる世界を仮想的に再現したものです．ボード上に均等に配置されたマス目は，<mark>われわれそのもの</mark>です．ちょっと信じがたいほどに抽象化されていて混乱するかもしれませんが，そういうものと割り切ってください．何はともあれまずは下にある <button>▷PLAY</button> ボタンをポチッと．
+    </p>
+
+    <p>
+        <canvas id="example01" width="500" height="500"></canvas>
+    </p>
+
+    <p id="date-ex01">日数:0</p>
+
+    <p>
+        <button input type="button" id="step-ex01"><font size="5">▷STEP</font></button>
+        <button input type="button" id="play-ex01"><font size="5">▷PLAY</font></button>
+        <button input type="button" id="reset-ex01"><font size="5">RESET</font></button>
+    </p>
+
+    <p>
+        どうですか？私のコードが間違ってさえいなければ，中心にあった赤いマスがどんどん広がって，ついにはボードが赤いマスで覆われたはずです．赤いマスはウイルスへの<mark>感染者</mark>を表していて，中心の彼が周りの8人に感染させ，またその周りの8人が感染させ...ついには全員が感染してしまったわけです．もう一度見たい時は <button>RESET</button> ボタンでリセットしてください．1日ずつ日付を進めたい時は <button>▷STEP</button> ボタンを押してください．
+    </p>
+
+    <h2>
+        1.2. 感染はランダム
+    </h2>
+
+    <p>
+        うすうす感づいているかと思いますが，現実はこんなに単純ではありません．まずはこんな疑問が生まれるはずです．「<em>感染者は必ず8人に病気をうつすって誰が決めたんだ？</em>」その通り．感染者一人が何人にうつすかはランダムです．加えて，最初に現れる感染者がたった一人とは限りません．これらを組み込んだモデルが，次のものです．
+    </p>
+
+    <p>
+        <canvas id="example02" width="500" height="500"></canvas>
+    </p>
+
+    <p id="date-ex02">日数:0</p>
+
+    <p>
+        <button input type="button" id="step-ex02"><font size="5">▷STEP</font></button>
+        <button input type="button" id="play-ex02"><font size="5">▷PLAY</font></button>
+        <button input type="button" id="reset-ex02"><font size="5">RESET</font></button>
+    </p>
+
+    <p>
+        感染確率<em>α</em>:<span id="alpha-ex02"></span>%
+    </p>
+
+    <p>
+        <input type="range" id="alpha-slider-ex02" name="speed" min="0" max="5" value="3" step="0.0001">
+    </p>
+
+    <p>
+        初期感染確率<em>P(I)</em>:<span id="probI-ex02"></span>%
+    </p>
+
+    <p>
+        <input type="range" id="probI-slider-ex02" name="speed" min="0" max="20" value="5" step="0.0001">
+    </p>
+
+    <p>
+        少し状況が複雑になってきたので，人数を増やしました．ちなみに，このボードの上端と下端，および右端と左端は繋がっています．
+    </p>
+
+    <p>
+        再生すると，感染は不規則な形で広がっていきます．ちょっとシミュレーションっぽくなってきました．2つのパラメータをスライドバーでいじれるので，色々試してみてください．以下にパラメータの説明を付記しておきます．
+    </p>
+
+    <ul>
+        <li><strong>感染確率</strong>:一人が一人に対して感染させる確率のこと．</li>
+        <li><strong>初期感染確率</strong>:ある人が0日の状態で感染者である確率．5%ならおおむね100人あたり5人の感染者から感染が始まる．</li>
+    </ul>
+
+    <h2>
+        1.3. 小さな防衛軍:免疫
+    </h2>
+
+    <p>
+        少し現実味を帯びてきましたが，大事な要素がひとつ足りませんね？<mark>免疫</mark>です．例えばはしかに一度かかって回復したら，ほとんどの場合二度とはしかにかかることはありません．
+    </p>
+
+    <p>
+        免疫という概念の導入はとても大切です．なぜか？ちょっと下のモデルを再生してみてください．
+    </p>
+
+    <p>
+        <canvas id="example03" width="500" height="500"></canvas>
+    </p>
+
+    <p id="date-ex03">日数:0</p>
+
+    <p>
+        <button input type="button" id="step-ex03"><font size="5">▷STEP</font></button>
+        <button input type="button" id="play-ex03"><font size="5">▷PLAY</font></button>
+        <button input type="button" id="reset-ex03"><font size="5">RESET</font></button>
+    </p>
+
+    <p>
+        感染者は緑色の免疫保持者に阻まれて，感染を広げることができません．地域内で多くの人が免疫を持つようになると，このような状況が頻発して感染は収束していきます．これを<mark>集団免疫</mark>と呼び，感染収束の目安となります．ただし...残酷な話ですが，それだけ多くの人間が感染したら，<strong>死亡者</strong>も相当な数になってしまうでしょう．だから私たちは，免疫を人工的に作り出せる<mark>ワクチン</mark>を待ち侘びているのです．
+    </p>
+
+    <p>
+        以下は，免疫を導入したモデルです．今までよりいくぶんか面白い動きをしてくれるはずです．
+    </p>
+
+    <p>
+        <canvas id="example04" width="500" height="500"></canvas>
+    </p>
+
+    <p id="date-ex04">日数:0</p>
+
+    <p>
+        <button input type="button" id="step-ex04"><font size="5">▷STEP</font></button>
+        <button input type="button" id="play-ex04"><font size="5">▷PLAY</font></button>
+        <button input type="button" id="reset-ex04"><font size="5">RESET</font></button>
+    </p>
+
+    <p>
+        感染確率<em>α</em>:<span id="alpha-ex04"></span>%
+    </p>
+
+    <p>
+        <input type="range" id="alpha-slider-ex04" name="speed" min="0" max="5" value="3" step="0.0001">
+    </p>
+
+    <p>
+        初期感染確率<em>P(I)</em>:<span id="probI-ex04"></span>%
+    </p>
+
+    <p>
+        <input type="range" id="probI-slider-ex04" name="speed" min="0" max="20" value="5" step="0.0001">
+    </p>
+
+    <p>
+        感染性期間<em>1/γ</em>:<span id="gamma-ex04"></span>日
+    </p>
+
+    <p>
+        <input type="range" id="gamma-slider-ex04" name="speed" min="1" max="20" value="5" step="1">
+    </p>
+
+    <p>
+        パラメータが一つ増えたので，以下で説明します．
+    </p>
+
+    <ul>
+        <li><strong>感染性期間</strong>:感染者が発症している日数のこと．</li>
+    </ul>
+
+    <h2>
+        1.4. COVID-19
+    </h2>
+
+    <p>
+        まだまだツッコミどころはありそうなものですが，ひとまずそれっぽくなってきました．ここで，新型コロナウイルスの特性を導入したモデルを作ってみます．
+    </p>
+
+    <p>
+        新型コロナウイルスは，実は一つ重要な特性を持っています．それは，80%の人間は誰にも感染させず，20%の人間がほとんど感染させている，という点です．
+    </p>
+
+    <p>
+        くどくど説明するより，このグラフを見た方が早いでしょう．これは厚労省の調査で，110人の感染者がどれだけの人数に感染させたのかを調べたものです．83人もの人が誰にもうつしていません．なのになぜこんなにも感染力が強いのか？その答えはグラフの右の方．値が少なすぎてほとんど潰れていますが，多い人で1人あたり12人にもうつしています．こういった存在を専門用語で<mark>スーパースプレッダー</mark>と言います．さて，なぜスーパースプレッダーは生まれるのでしょう？その答えは昨年耳にタコができるほど聞いたあの言葉「<mark>三密</mark>」にあるのです！
+    </p>
+
+    <p>
+        ここで，三密をおさらいしておきましょう．三密とは，
+    </p>
+
+    <ul>
+        <li>換気の悪い<strong>密閉空間</strong></li>
+        <li>多数が集まる<strong>密集場所</strong></li>
+        <li>間近で会話や発声をする<strong>密接場面</strong></li>
+    </ul>
+
+    <p>
+        の総称でした．一躍時の人となった「8割おじさん」こと西浦博先生は，感染の極初期(昨年の2月ごろ)このような三密の条件で過ごした人間がスーパースプレッダーになりやすいという仮説を立てています．先見の明とはこのことか...といったところですが，ともかく三密の回避は感染抑制に重要なファクターとなりそうです．そこで，三密がどの程度回避されたか？を表すパラメータを用意したモデルが以下になります．
+    </p>
+
+    <p>
+        <canvas id="example05" width="500" height="500"></canvas>
+    </p>
+
+    <p id="date-ex05">日数:0</p>
+
+    <p>
+        <button input type="button" id="step-ex05"><font size="5">▷STEP</font></button>
+        <button input type="button" id="play-ex05"><font size="5">▷PLAY</font></button>
+        <button input type="button" id="reset-ex05"><font size="5">RESET</font></button>
+    </p>
+
+    <p>
+        初期感染確率<em>P(I)</em>:<span id="probI-ex05"></span>%
+    </p>
+
+    <p>
+        <input type="range" id="probI-slider-ex05" name="speed" min="0" max="20" value="5" step="0.0001">
+    </p>
+
+    <p>
+        三密指数<em>m</em>:<span id="mitsu-ex05"></span>%
+    </p>
+
+    <p>
+        <input type="range" id="mitsu-slider-ex05" name="speed" min="0" max="100" value="100" step="1">
+    </p>
+
+    <p>
+        また新しいパラメータが登場しました．代わりに「感染確率」「感染性期間」は調節できなくなっていますが，実はこの2つは感染症の種類によって大体決まっています．新型コロナウイルスの場合も研究である程度はわかっているので，それを採用しました．
+    </p>
+
+    <ul>
+        <li><strong>三密指数</strong>:社会においてどの程度三密状況の削減ができているかを表す．30%なら普段より7割削減できていることになる．</li>
+    </ul>
+
+    <p>
+        パラメータをあれこれ弄れば，その効果は絶大であることがわかります．しかし，「行動制限をかければ同じ効果が得られそうだけど，どうしてそんなに三密にこだわるの？」と思うかもしれません．なぜか．それは，三密の回避というのは非常に「<mark>コスパ</mark>」の良い対策であるからなのです．確かに<mark>ロックダウン</mark>をすれば感染はストップするでしょう．でも，同時に経済もストップしてしまう．ロックダウンは全く持続的とはいえない対策なのです．三密回避は，いわば新型コロナウイルスの急所を突く作戦というわけです．
+    </p>
+
+    <h2>
+        1.5. おわりに
+    </h2>
+
+    <p>
+        たった1年前には想像だにしない世界に来てしまった，と心の底から思います．私たちの社会というものは，新興感染症に対してあまりにも無頓着すぎたと今は感じています．ともあれ，ワクチン開発が成功したという明るいニュースもあちらこちらで聞こえてきています．来年の今頃は，なんのためらいもなく新年を祝えることを願って，「<strong>あけましておめでとう！</strong>」．
+    </p>
+
+    <h1>
+        2. シミュレータ(完全版)
+    </h1>
+    
+    <p>
+        1章で解説したシミュレータを拡張して，人数を100×100=1万人にし，感染状況をグラフ化して見られるようにしました．パラメータを色々触って遊んでみてね．
+    </p>
+
+    <p>
+        <canvas id="sim" width="500" height="500"></canvas>
+    </p>
+
+    <p id="date-sim">日数:0</p>
+
+    <p>
+        <button input type="button" id="step-sim"><font size="5">▷STEP</font></button>
+        <button input type="button" id="play-sim"><font size="5">▷PLAY</font></button>
+        <button input type="button" id="reset-sim"><font size="5">RESET</font></button>
+    </p>
+
+    <p>
+        感染確率<em>α</em>:<span id="alpha-sim"></span>%
+    </p>
+
+    <p>
+        <input type="range" id="alpha-slider-sim" name="speed" min="0" max="5" value="3" step="0.0001">
+    </p>
+
+    <p>
+        初期感染確率<em>P(I)</em>:<span id="probI-sim"></span>%
+    </p>
+
+    <p>
+        <input type="range" id="probI-slider-sim" name="speed" min="0" max="20" value="5" step="0.0001">
+    </p>
+
+    <p>
+        感染性期間<em>1/γ</em>:<span id="gamma-sim"></span>日
+    </p>
+
+    <p>
+        <input type="range" id="gamma-slider-sim" name="speed" min="1" max="20" value="5" step="1">
+    </p>
+
+    <p>
+        <div class="chart-container">
+            <div id="chart"  style="background-color: #ffffff;"></div>
+        </div>
+    </p>
+
+    <h1>
+        3. [コラム]COCOA入れてますか？
+    </h1>
+    
+    <br>
+    <img src="./image/cocoa-covid-19-contact-app.png" alt="COCOA" width="150">
+
+    <p>
+        おそらく存在は知っていると思います，「接触確認アプリCOCOA」．ダウンロード件数は2000万件を超えましたが，私の身の回りでインストールしている人はまだまだ少ないです．なんとなく怖いという理由で忌避している人もいるかもしれないので，その有用性をここで力説しておきます．
+    </p>
+
+    <p>
+        新型コロナウイルスは，潜伏期間が長く発症前から感染させることはご存知かと思います．発症者だけを追いかけても感染はなかなか止まらないので，保健所はクラスター対策と称して接触者の追跡を行っていますが，どうしても限界があり，他人のプライバシーに踏み込むことになるので難しい面があります．
+    </p>
+
+    <p>
+        COCOAのすごいところは，一切プライバシーを侵害することなく接触者追跡を行える点です．COCOAは<mark>BLE</mark>と呼ばれるBluetooth通信の一種を用いて，15分以上近くにいた人のスマホ固有の情報を「<mark>ハッシュ</mark>」と呼ばれる暗号で保管します．COCOAの肝はここです．
+    </p>
+
+    <img src="./image/hash.svg" style="background-color: #ffffff;">
+
+    <p>
+        ハッシュ暗号は，暗号化することはできても復元はできないという原理的特徴を持っています．接触から数日後，近くにいた人が感染者として登録されると，その人のスマホの情報をハッシュ化したものが日本中のアプリに配られます．記録したハッシュが一致すれば，感染者と接触したことがわかり，通知が来るという仕組みです．
+    </p>
+
+    <img src="./image/app.svg" style="background-color: #ffffff;">
+
+    <p>
+        実際にやり取りされるのはそのハッシュ暗号だけですから，個人を特定することは一切不可能です．安全かつ優秀なCOCOAですが，唯一の欠点はみんながインストールしていないと意味をなさないことです．あなたのスマホに100MB程度でも空きがあるのなら，ぜひインストールしてみてください．
+    </p>
+
+    <p>
+        <a href="https://apps.apple.com/jp/app/cocoa-%E6%96%B0%E5%9E%8B%E3%82%B3%E3%83%AD%E3%83%8A%E3%82%A6%E3%82%A4%E3%83%AB%E3%82%B9%E6%8E%A5%E8%A7%A6%E7%A2%BA%E8%AA%8D%E3%82%A2%E3%83%97%E3%83%AA/id1516764458?itsct=apps_box&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-top-left-radius: 13px; border-top-right-radius: 13px; border-bottom-right-radius: 13px; border-bottom-left-radius: 13px; width: 250px; height: 83px;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ja-JP?size=250x83&amp;releaseDate=1592438400&h=f3fc635e75ec6eae10d87af4da379298" alt="Download on the App Store" style="border-top-left-radius: 13px; border-top-right-radius: 13px; border-bottom-right-radius: 13px; border-bottom-left-radius: 13px; width: 250px; height: 83px;"></a><BR><a href='https://play.google.com/store/apps/details?id=jp.go.mhlw.covid19radar&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Google Play で手に入れよう' src='https://play.google.com/intl/en_us/badges/static/images/badges/ja_badge_web_generic.png'width="250"/></a>
+    </p>
+
+    <h1>
+        4. 感染症の数理的理論
+    </h1>
+
+    <p>
+        感染症疫学では，1900年代に入り感染者のデータが取られるようになってから，数理的にその感染を解析する流れが生まれました．この分野を数理感染症と言い，西浦先生もこの分野の第一人者です．ここではそのごく入門レベルを素人が解釈して記述してみます．少し込み入った話もするので，以下のページに置いておきます．
+        <a href="./theory.html">感染症の数理</a>
+    </p>
+
+    <script src="./output/bundle.js"></script>
+</body>
+</html>
