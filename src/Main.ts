@@ -3,7 +3,6 @@ import {CellMap as CM} from "./CellMap";
 import {CVirus as CV, VaiableVirus as VV} from "./Virus";
 import {Primitive} from "c3";
 import * as bd from "./Board";
-import * as ch from "./Chart";
 
 // パラメータ
 let ex02Alpha: number = 0.5;
@@ -413,49 +412,26 @@ let r: [string, Primitive] = ["R(回復者)", cmSim.numberOfState("R")];
 
 let chart = c3.generate({
     bindto: '#chart',
-    size: { width: width, height: width* 0.6}, // グラフ描画領域のサイズ
+    size: { width: width, height: width* 0.7}, // グラフ描画領域のサイズ
     data: {
       columns: [
         s,
         i,
         r
       ],
-      types: {
-        S: 'area-spline',
-        I: 'area-spline',
-        R: 'area-spline', 
-      },
+      type: 'spline',
       labels: false // それぞれの点に数値を表示しない
     },
-    tooltip: {
-        show:true
+    point: {
+        show: false // ポイントの表示
     },
     axis: {
-      x: {
-
-        label: {
-          text: '日数',
-          position: 'outer-center'
+        x: {
+            label: "日数",
         },
-        padding: {
-            left: 0,
-            right: 0
+        y: {
+            inner: true
         }
-      },
-      y: {
-
-        show: false,
-        label: {
-          text: '人数',
-          position: 'outer-middle'
-        }
-      }
-    },
-    point: {
-        show: false,
-    },
-    legend: {
-        show: false
     }
 });
 
@@ -540,25 +516,3 @@ resetSim.onclick = function() {
     })
     chart.flush();
 }
-
-/*
-
-
-
-window.addEventListener("keydown", e => {
-    cm.getNewGen();
-    s.push(cm.numberOfState("S"));
-    i.push(cm.numberOfState("I"));
-    r.push(cm.numberOfState("R"));
-    
-    chart.load({
-        columns: [
-            s,
-            i,
-            r
-        ]
-    })
-    chart.flush();
-
-});
-*/
