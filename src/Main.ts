@@ -463,6 +463,7 @@ stepSim.onclick = function() {
     chart.flush();
 }
 playSim.onclick = function() {
+    window.clearInterval(simTimer.shift());
     simAlpha = Number(inputSimAlpha.value) / 100;
     simProbI = Number(inputSimprobI.value) / 100;
     simGamma = 1 / Number(inputSimGamma.value);
