@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+
+<!-- Page 1 -->
+<svg x="0" y="0" width="849" height="444" viewBox="0 0 849 444" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+style="display: block;margin-left: auto;margin-right: auto;">
+<defs>
+<clipPath id="c_1"><path d="M0,0H849V444H0Z"/></clipPath>
+<clipPath id="c0"><path d="M-102.3,1390.3V-141H979.8V1390.3Z"/></clipPath>
+<clipPath id="c1"><path d="M86.9,32.2V.1H848.1V32.2Z"/></clipPath>
+<clipPath id="c2"><path d="M-.8,373.7V54.4H37.7V373.7Z"/></clipPath>
+<clipPath id="c3"><path d="M51.2,387V360.3H70.8V387Z"/></clipPath>
+<clipPath id="c4"><path d="M36.1,307.2V280.5H70.8v26.7Z"/></clipPath>
+<clipPath id="c5"><path d="M36.1,227.4V200.6H70.8v26.8Z"/></clipPath>
+<clipPath id="c6"><path d="M36.1,147.6V120.8H70.8v26.8Z"/></clipPath>
+<clipPath id="c7"><path d="M36.1,67.7V41H70.8V67.7Z"/></clipPath>
+<clipPath id="c8"><path d="M88.4,445.1V406.5H847.3v38.6Z"/></clipPath>
+<clipPath id="c9"><path d="M132.8,408V381.3h19.6V408Z"/></clipPath>
+<clipPath id="ca"><path d="M241.2,408V381.3h19.6V408Z"/></clipPath>
+<clipPath id="cb"><path d="M349.6,408V381.3h19.7V408Z"/></clipPath>
+<clipPath id="cc"><path d="M458,408V381.3h19.7V408Z"/></clipPath>
+<clipPath id="cd"><path d="M566.5,408V381.3h19.6V408Z"/></clipPath>
+<clipPath id="ce"><path d="M674.9,408V381.3h19.6V408Z"/></clipPath>
+<clipPath id="cf"><path d="M775.8,408V381.3h34.7V408Z"/></clipPath>
+
+<style type="text/css"><![CDATA[
+text { white-space: pre; }
+path, image { pointer-events: none; }
+
+.s1{
+font-size: 30.56px;
+font-family: HiraKakuProN-W3_u;
+fill: #000;
+}
+.s2{
+font-size: 25.97px;
+font-family: HiraKakuProN-W3_u;
+fill: #000;
+}
+.s3{
+font-size: 22.92px;
+font-family: HiraKakuProN-W3_u;
+fill: #000;
+}
+
+.g0{
+fill: #FFFFFF;
+}
+.g1{
+fill: none;
+stroke: #B8B8B8;
+stroke-width: 0.763;
+stroke-linecap: butt;
+stroke-linejoin: miter;
+stroke-miterlimit: 4;
+}
+.g2{
+fill: none;
+stroke: #000000;
+stroke-width: 1.527;
+stroke-linecap: square;
+stroke-linejoin: miter;
+stroke-miterlimit: 4;
+}
+.g3{
+fill: #00A2FF;
+}
+
+]]></style>
+
+</defs>
+<path d="M0,0
+L0,444
+L849,444
+L849,0 Z " 
+fill="#FFFFFF" stroke="none"/>
+<g clip-path="url(#c_1)">
+<path clip-path="url(#c0)" d="M-102.3,1391.2H980.8V-141H-102.3V1391.2Z" class="g0"/>
+<path d="M-102.3,1390.3H979.8V-141H-102.3V1390.3Z" class="g0"/>
+<text clip-path="url(#c1)" x="254.4" y="27" class="s1">国内の感染者110人の調査結果</text>
+<path d="M88.6,294.1H847.9M88.6,214.7H847.9M88.6,133.7H847.9M88.6,54.2H847.9" class="g1"/>
+<g clip-path="url(#c2)">
+<text transform="matrix(0,-1,1,0,22.7,240)" class="s2">人数</text>
+</g>
+<text clip-path="url(#c3)" x="53.5" y="382.8" class="s3">0</text>
+<text clip-path="url(#c4)" x="38.4" y="302.9" class="s3">23</text>
+<text clip-path="url(#c5)" x="38.4" y="223.1" class="s3">45</text>
+<text clip-path="url(#c6)" x="38.4" y="143.3" class="s3">68</text>
+<text clip-path="url(#c7)" x="38.4" y="63.5" class="s3">90</text>
+<path d="M87.8,373.5H847.2" class="g2"/>
+<text clip-path="url(#c8)" x="351.4" y="442" dx="0,0,0,-.8,0,0,0,0,0" class="s2">他人にうつした人数</text>
+<text clip-path="url(#c9)" x="135.1" y="403.8" class="s3">0</text>
+<text clip-path="url(#ca)" x="243.5" y="403.8" class="s3">1</text>
+<text clip-path="url(#cb)" x="351.9" y="403.8" class="s3">2</text>
+<text clip-path="url(#cc)" x="460.3" y="403.8" class="s3">3</text>
+<text clip-path="url(#cd)" x="568.7" y="403.8" class="s3">4</text>
+<text clip-path="url(#ce)" x="677.2" y="403.8" class="s3">9</text>
+<text clip-path="url(#cf)" x="778.1" y="403.8" class="s3">12</text>
+<path d="M103.9,79.4h77.9V372.8H103.9Z" class="g3"/>
+<path d="M212.4,316.3h77.9v56.5H212.4Z" class="g3"/>
+<path d="M320.8,359h78v13.8h-78Z" class="g3"/>
+<path d="M429.3,359h77.9v13.8H429.3Z" class="g3"/>
+<path d="M537.8,359h77.9v13.8H537.8Z" class="g3"/>
+<path d="M646.3,369.7h77.9v3.1H646.3Z" class="g3"/>
+<path d="M754.7,369.7h76.4v3.1H754.7Z" class="g3"/>
+
+</g>
+
+<!-- Any embedded fonts defined here -->
+<style type="text/css" ><![CDATA[
+
+@font-face {
+	font-family: HiraKakuProN-W3_u;
+	src: url("fonts/HiraKakuProN-W3_u.woff") format("woff");
+}
+
+]]></style>
+
+</svg>
