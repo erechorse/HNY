@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
     <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
     <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" async src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <title>Theory</title>
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
@@ -31,13 +31,11 @@
 
     <p>
         W.O.KermackとA.G.McKendrickにより提唱された感染症の数理モデルとして，SIRモデルがある．これは，以下の3つの微分方程式で表される．
-        \[
             \begin{align}
                 \frac{dS(t)}{dt} &= - \beta S(t) I(t) \\
                 \frac{dI(t)}{dt} &= - \gamma I(t) + \beta S(t) I(t) \\
                 \frac{dR(t)}{dt} &= \gamma I(t)
             \end{align}
-        \]
         ここで，\(S(t)\)は時間\(t\)における感受性(感染する可能性がある)，\(I(t)\)は感染性(感染させる可能性がある)，\(R(t)\)を隔離・免疫状態(感染しない，させない)の人数を表している．
     </p>
 
@@ -51,25 +49,19 @@
 
     <p>
         ここで，感染初期の感染人口変化を導出してみよう．今回考えるのは人類が未知の感染症であるから，初めは誰も免疫を持っていない状態\(R_{0} = 0\)と仮定する．ここで時刻\(0\)における感受性者を\(S_{0}\)とし，初期における感受性人口\(S(t)\)の変化は小さいので無視すると，(2)式は以下のように整理されるであろう．
-        \[
             \begin{align}
                 \frac{dI(t)}{dt} &= (\beta S_{0} - \gamma)I(t) \\
             \end{align}
-        \]
         これは明らかに線型微分方程式であり，この解は以下のように求められる．
-        \[
             \begin{align} 
                 I(t) = e^{(\beta S_{0} - \gamma)t} I(0)
             \end{align}
-        \]
         この式は何を表しているだろうか？まず読み取れるのは，感染初期において，感染者数の増大は指数関数的(要するにねずみ算)であること．これは，感染者がそれぞれに何人かに感染させ，またその感染者が何人かに感染させ...と感染者が増大していくことを想像すると，直感的にも正しい．また
         
-        \[
             \begin{align} 
                 \beta S_{0} - \gamma &> 0 \\
                 \therefore \frac{\beta S_{0}}{\gamma} &> 1
             \end{align}
-        \]
 
         となることが，継続的に感染者が増加し続ける条件であることも読み取れる．(7)式の左辺を基本再生産数\(R_{0}\)と呼び，感染症が拡大するかどうかを表す指標として用いられる．新型コロナウイルスは\(R_{0}=2.5\)程度であると推測されている．(なお，解説は省くが，基本再生産数は一人が何人に感染させるかを表すものでもあり，一人の感染者が一人にしかうつさなければ感染が広がらないのは当たり前．出生率が2.0を超えないといつか人口減少に転ずるのと同じような話．)
     </p>
@@ -88,14 +80,12 @@
 
     <p>
         誰でも思いつくだろうが，このSIRモデルには重大な概念「潜伏期間」が欠けている．特に新型コロナウイルスの場合最大2週間と言う長い潜伏期間を持っているので，本来は無視できない指標である．潜伏期間である\(E(t)\)を導入し，以下のSEIRモデルを得る．
-        \[
             \begin{align}
                 \frac{dS(t)}{dt} &= m(N(t)-S(t)) - bS(t)I(t) \\
                 \frac{dE(t)}{dt} &= bS(t)I(t) - (m + a)E(t) \\
                 \frac{dI(t)}{dt} &= aE(t) - (m + g)I(t) \\
                 \frac{dR(t)}{dt} &= gI(t) - mR(t)
             \end{align}
-        \]
         ここでは解説しないので，細かいパラメータの説明は省くが，出生率や死亡率も導入されたモデルとなっている．実は振る舞いがカオス的であることが知られており，面白そうではあったが今回の実装に間に合わなかったので適用しなかった．
     </p>
 
@@ -116,7 +106,6 @@
 
     <p>
         と言う4つのパラメータが必要となる．この時，ある日付nにおける子供の感染者数\(I_{c}(n)\)，大人の感染者数\(I_{a}(n)\)とおくと，次の感染者数\(I_{c}(n+1)\)，\(I_{a}(n+1)\)は，以下の漸化式で関係づけられる．
-        \[
             \begin{align}
                 \left(
                     \begin{array}{cc}
@@ -136,7 +125,6 @@
                     \end{array}
                 \right)
             \end{align}
-        \]
         ここで登場する行列を次世代行列といい，この漸化式を解くと，より正確な解析が可能になる．分け方は別に年齢に限る必要もなく，例えばエッセンシャルワーカーとそれ以外で2分割したモデルを導入すれば，ロックダウン時であってもインフラを担当する彼らは休むことができず，接触の減少は期待できない...など，細かい分析が可能になるだろう．今回のシミュレーションでこの人口の異質性の考慮は含めていない．
     </p>
 
@@ -152,14 +140,12 @@
 
     <p>
         W.O.KermackとA.G.McKendrickが提唱したSIRモデルには実はもう一つある．
-        \[
             \begin{align} 
                 \frac{dS(t)}{dt} &= -S(t) \int^{\infty}_{0} \beta (\tau) i(t,\tau) d \tau \\ 
                 \left( \frac{\partial}{\partial t} + \frac{\partial}{\partial \tau} \right) &= - \gamma (\tau) i(t,\tau) \\
                 i(t,0) &= S(t) \int^{\infty}_{0} \beta (\tau) i(t,\tau) \\
                 \frac{dR(t)}{dt} &= \int^{\infty}_{0} \gamma (\tau) i(t,\tau) d \tau
             \end{align}
-        \]
         これは，感染齢別の観点から現象を構造化したものである．偏微分方程式まで登場してしまった．流石に元日からやるような内容でないし，やりたくもない．詳しく学びたい場合は末尾に記した参考文献でを参照していただきたい．
     </p>
 
