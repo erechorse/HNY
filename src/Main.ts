@@ -19,6 +19,7 @@ let simGamma: number = 0.1;
 let simProbI: number = 0.001;
 
 // ウイルス
+let vvEx01 = new VV(1,0);
 let vvEx02 = new VV(ex02Alpha, 0);
 let vvEx03 = new VV(ex03Alpha, ex03Gamma);
 let vvEx04 = new VV(ex04Alpha, ex04Gamma);
@@ -32,7 +33,7 @@ const cmEx03 = new CM(11);
 const cmEx04 = new CM(50);
 const cmEx05 = new CM(50);
 const cmSim = new CM(100);
-cmEx01.manualReset(5, 5, new VV(1,0), false);
+cmEx01.manualReset(5, 5, vvEx01, false);
 cmEx02.reset(ex02probI, vvEx02);
 cmEx03.manualReset(5,5,vvEx03,true);
 cmEx04.reset(ex04probI, vvEx04);
@@ -244,24 +245,28 @@ const playSim = <HTMLButtonElement>document.getElementById("play-sim");
 const resetSim = <HTMLButtonElement>document.getElementById("reset-sim"); 
 
 //Example01の逐次処理
-let ex01Timer: number;
+let ex01Timer: number[] = new Array();
 stepEx01.onclick = function() {
     cmEx01.getNewGen();
     dateEx01.innerHTML = "日数:" + cmEx01.date;
     bd.BoardViewr(ex01Canvas, cmEx01.cells, cmEx01.sides);
 }
 playEx01.onclick = function() {
-    ex01Timer = window.setInterval(function() {
+    window.clearInterval(ex01Timer.shift());
+    cmEx01.manualReset(5, 5, vvEx01, false);
+    dateEx01.innerHTML = "日数:" + cmEx01.date;
+    bd.BoardViewr(ex01Canvas, cmEx01.cells, cmEx01.sides);
+    ex01Timer.push(window.setInterval(function() {
         cmEx01.getNewGen();
         dateEx01.innerHTML = "日数:" + cmEx01.date;
         bd.BoardViewr(ex01Canvas, cmEx01.cells, cmEx01.sides);
         if (cmEx01.numberOfState("S") === 0) {
-            window.clearInterval(ex01Timer);
+            window.clearInterval(ex01Timer.shift());
         }
-    }, 500)
+    }, 500));
 }
 resetEx01.onclick = function() {
-    window.clearInterval(ex01Timer);
+    window.clearInterval(ex01Timer.shift());
     cmEx01.manualReset(5, 5, new VV(1,0), false);
     dateEx01.innerHTML = "日数:" + cmEx01.date;
     bd.BoardViewr(ex01Canvas, cmEx01.cells, cmEx01.sides);
@@ -269,32 +274,33 @@ resetEx01.onclick = function() {
 
 
 //Example02の逐次処理
-let ex02Timer: number;
+let ex02Timer: number[] = new Array();
 stepEx02.onclick = function() {
     cmEx02.getNewGen();
     dateEx02.innerHTML = "日数:" + cmEx02.date;
     bd.BoardViewr(ex02Canvas, cmEx02.cells, cmEx02.sides);
 }
 playEx02.onclick = function() {
+    window.clearInterval(ex02Timer.shift());
     ex02Alpha = Number(inputEx02Alpha.value) / 100;
     ex02probI = Number(inputEx02probI.value) / 100;
     vvEx02 = new VV(ex02Alpha, 0);
     cmEx02.reset(ex02probI, vvEx02);
     dateEx02.innerHTML = "日数:" + cmEx02.date;
-    ex02Timer = window.setInterval(function() {
+    ex02Timer.push(window.setInterval(function() {
         cmEx02.getNewGen();
         bd.BoardViewr(ex02Canvas, cmEx02.cells, cmEx02.sides);
         dateEx02.innerHTML = "日数:" + cmEx02.date;
         if (cmEx02.numberOfState("S") === 0) {
-            window.clearInterval(ex02Timer);
+            window.clearInterval(ex02Timer.shift());
         } else if (cmEx02.date > 100) {
             dateEx02.innerHTML = "日数:Time Out"
-            window.clearInterval(ex02Timer);
+            window.clearInterval(ex02Timer.shift());
         }
-    }, 250);
+    }, 250));
 }
 resetEx02.onclick = function() {
-    window.clearInterval(ex02Timer);
+    window.clearInterval(ex02Timer.shift());
     ex02Alpha = Number(inputEx02Alpha.value) / 100;
     ex02probI = Number(inputEx02probI.value) / 100;
     vvEx02 = new VV(ex02Alpha, 0);
@@ -304,27 +310,28 @@ resetEx02.onclick = function() {
 }
 
 //Example03の逐次処理
-let ex03Timer: number;
+let ex03Timer: number[] = new Array();
 stepEx03.onclick = function() {
     cmEx03.getNewGen();
     dateEx03.innerHTML = "日数:" + cmEx03.date;
     bd.BoardViewr(ex03Canvas, cmEx03.cells, cmEx03.sides);
 }
 playEx03.onclick = function() {
+    window.clearInterval(ex03Timer.shift());
     vvEx03 = new VV(ex03Alpha, ex03Gamma);
     cmEx03.manualReset(5,5,vvEx03,true)
     dateEx03.innerHTML = "日数:" + cmEx03.date;
-    ex03Timer = window.setInterval(function() {
+    ex03Timer.push(window.setInterval(function() {
         cmEx03.getNewGen();
         bd.BoardViewr(ex03Canvas, cmEx03.cells, cmEx03.sides);
         dateEx03.innerHTML = "日数:" + cmEx03.date;
         if (cmEx03.numberOfState("I") === 0) {
-            window.clearInterval(ex03Timer);
+            window.clearInterval(ex03Timer.shift());
         }
-    }, 250);
+    }, 250));
 }
 resetEx03.onclick = function() {
-    window.clearInterval(ex03Timer);
+    window.clearInterval(ex03Timer.shift());
     vvEx03 = new VV(ex03Alpha, ex03Gamma);
     cmEx03.manualReset(5,5,vvEx03,true);
     dateEx03.innerHTML = "日数:" + cmEx02.date;
@@ -332,33 +339,34 @@ resetEx03.onclick = function() {
 }
 
 //Example04の逐次処理
-let ex04Timer: number;
+let ex04Timer: number[] = new Array();
 stepEx04.onclick = function() {
     cmEx04.getNewGen();
     dateEx04.innerHTML = "日数:" + cmEx04.date;
     bd.BoardViewr(ex04Canvas, cmEx04.cells, cmEx04.sides);
 }
 playEx04.onclick = function() {
+    window.clearInterval(ex04Timer.shift());
     ex04Alpha = Number(inputEx04Alpha.value) / 100;
     ex04probI = Number(inputEx04probI.value) / 100;
     ex04Gamma = 1 / Number(inputEx04Gamma.value);
     vvEx04 = new VV(ex04Alpha, ex04Gamma);
     cmEx04.reset(ex04probI, vvEx04);
     dateEx04.innerHTML = "日数:" + cmEx04.date;
-    ex04Timer = window.setInterval(function() {
+    ex04Timer.push(window.setInterval(function() {
         cmEx04.getNewGen();
         bd.BoardViewr(ex04Canvas, cmEx04.cells, cmEx04.sides);
         dateEx04.innerHTML = "日数:" + cmEx04.date;
         if (cmEx04.numberOfState("I") === 0) {
-            window.clearInterval(ex04Timer);
+            window.clearInterval(ex04Timer.shift());
         } else if (cmEx04.date > 1000) {
             dateEx04.innerHTML = "日数:Time Out"
-            window.clearInterval(ex04Timer);
+            window.clearInterval(ex04Timer.shift());
         }
-    }, 250);
+    }, 250));
 }
 resetEx04.onclick = function() {
-    window.clearInterval(ex04Timer);
+    window.clearInterval(ex04Timer.shift());
     ex04Alpha = Number(inputEx04Alpha.value) / 100;
     ex04probI = Number(inputEx04probI.value) / 100;
     ex04Gamma = Number(inputEx04Gamma.value);
@@ -369,33 +377,34 @@ resetEx04.onclick = function() {
 }
 
 //Example05の逐次処理
-let ex05Timer: number;
+let ex05Timer: number[] = new Array();
 stepEx05.onclick = function() {
     cmEx05.getNewGen();
     dateEx05.innerHTML = "日数:" + cmEx05.date;
     bd.BoardViewr(ex05Canvas, cmEx05.cells, cmEx05.sides);
 }
 playEx05.onclick = function() {
+    window.clearInterval(ex05Timer.shift());
     ex05probI = Number(inputEx05probI.value) / 100;
     ex05Mitsu = Number(inputEx05Mitsu.value) / 100;
     cvEx05 = new CV(ex05Mitsu);
     cmEx05.reset(ex05probI, cvEx05);
     dateEx05.innerHTML = "日数:" + cmEx05.date;
     bd.BoardViewr(ex05Canvas, cmEx05.cells, cmEx05.sides);
-    ex05Timer = window.setInterval(function() {
+    ex05Timer.push(window.setInterval(function() {
         cmEx05.getNewGen();
         bd.BoardViewr(ex05Canvas, cmEx05.cells, cmEx05.sides);
         dateEx05.innerHTML = "日数:" + cmEx05.date;
         if (cmEx05.numberOfState("I") === 0) {
-            window.clearInterval(ex05Timer);
+            window.clearInterval(ex05Timer.shift());
         } else if (cmEx05.date > 1000) {
             dateEx05.innerHTML = "日数:Time Out"
-            window.clearInterval(ex05Timer);
+            window.clearInterval(ex05Timer.shift());
         }
-    }, 250);
+    }, 250));
 }
 resetEx05.onclick = function() {
-    window.clearInterval(ex05Timer);
+    window.clearInterval(ex05Timer.shift());
     ex05probI = Number(inputEx05probI.value) / 100;
     ex05Mitsu = Number(inputEx05Mitsu.value) / 100;
     cvEx05 = new CV(ex05Mitsu);
@@ -435,7 +444,7 @@ let chart = c3.generate({
     }
 });
 
-let simTimer: number;
+let simTimer: number[] = new Array();
 stepSim.onclick = function() {
     cmSim.getNewGen();
     dateSim.innerHTML = "日数:" + cmSim.date;
@@ -471,7 +480,7 @@ playSim.onclick = function() {
         ]
     })
     chart.flush();
-    simTimer = window.setInterval(function() {
+    simTimer.push(window.setInterval(function() {
         cmSim.getNewGen();
         bd.BoardViewr(simCanvas, cmSim.cells, cmSim.sides);
         dateSim.innerHTML = "日数:" + cmSim.date;
@@ -488,15 +497,15 @@ playSim.onclick = function() {
         })
         chart.flush();
         if (cmSim.numberOfState("I") === 0) {
-            window.clearInterval(simTimer);
+            window.clearInterval(simTimer.shift());
         } else if (cmSim.date > 1000) {
             dateSim.innerHTML = "日数:Time Out"
-            window.clearInterval(simTimer);
+            window.clearInterval(simTimer.shift());
         }
-    }, 10);
+    }, 10));
 }
 resetSim.onclick = function() {
-    window.clearInterval(simTimer);
+    window.clearInterval(simTimer.shift());
     simAlpha = Number(inputSimAlpha.value) / 100;
     simProbI = Number(inputSimprobI.value) / 100;
     simGamma = 1 / Number(inputSimGamma.value);
