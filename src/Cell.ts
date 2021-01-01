@@ -4,6 +4,7 @@ import {Virus as Vi, EmptyVirus as EV} from "./Virus";
 export class Cell {
 
     virus: Vi; //体内ウイルス
+    risk: boolean; //潜在的リスク
     x: number;
     y: number;
     neighbor: Cell[];
@@ -12,6 +13,7 @@ export class Cell {
 
     constructor(x: number, y: number) {
         this.virus = new EV();
+        this.risk = false;
         this.x = x;
         this.y = y;
         this.neighbor = new Array();
@@ -19,8 +21,9 @@ export class Cell {
         this.nextState = new StateS(0);
     }
 
-    reset(probI: number, virus: Vi) {
+    reset(probI: number, virus: Vi, mitsu: number) {
         this.virus = virus;
+        this.risk = (Rnd.getRandom() < 0.2 * mitsu);
         if (Rnd.getRandom() < probI) {
             this.currState = new StateI(0);
         } else {
@@ -95,7 +98,7 @@ export class StateS implements State {
     nextState(neighbor: Cell[], virus:Vi): State {
         for (let i = 0; i < neighbor.length; i++) {
             if (neighbor[i].currState.positive) {
-                if(virus.multi()) {
+                if(virus.multi(neighbor[i].risk)) {
                     return new StateI(0);
                 }
             }

@@ -1,7 +1,7 @@
 import * as Rnd from "./Random";
 
 export interface Virus {
-    multi(): boolean,
+    multi(risk: boolean): boolean,
     disappear(date: number): boolean
 }
 
@@ -10,7 +10,7 @@ export class EmptyVirus implements Virus{
     constructor() {
     }
 
-    multi(): boolean {
+    multi(risk: boolean): boolean {
         return false;
     }
 
@@ -23,17 +23,15 @@ export class CVirus implements Virus {
 
     private alpha: number = 0;
     private gamma: number = 0.1;
-    private mitsu: number = 1;
 
-    constructor(mitsu: number) {
-        this.mitsu = mitsu;
+    constructor() {
     }
 
-    multi(): boolean {
-        if (Rnd.getRandom() < 0.8) {
-            this.alpha = this.gamma * 2.5 / 8 / 4;
+    multi(risk: boolean): boolean {
+        if (risk) {
+            this.alpha = 4 * this.gamma * 2.5 / 8;
         } else {
-            this.alpha = 4 * this.gamma * 2.5 / 8 * this.mitsu;
+            this.alpha = this.gamma * 2.5 / 8 / 4;
         }
         if (Rnd.getRandom() < this.alpha) {
             return true;
@@ -60,7 +58,7 @@ export class VaiableVirus implements Virus {
         this.gamma = gamma;
     }
 
-    multi() {
+    multi(risk: boolean) {
         if (Rnd.getRandom() < this.alpha) {
             return true;
         } else {

@@ -1,5 +1,5 @@
 import {Cell as Cell, Null as Null, StateR as StateR} from "./Cell";
-import {Virus as Vi, Virus} from "./Virus";
+import {Virus as Vi} from "./Virus";
 
 export class CellMap {
 
@@ -13,7 +13,7 @@ export class CellMap {
         this.date = 0;
     }
 
-    reset(probI: number, virus: Vi) {
+    reset(probI: number, virus: Vi, mitsu: number) {
 
         this.cells = new Array();
 
@@ -25,7 +25,7 @@ export class CellMap {
             cellMap[y] = new Array();
             for (let x = 0; x < this.sides; x++) {
                 const c = new Cell(x, y);
-                c.reset(probI, virus);
+                c.reset(probI, virus, mitsu);
                 cellMap[y][x] = c;
             }         
         }
@@ -59,7 +59,7 @@ export class CellMap {
         return; 
     }
 
-    manualReset(coordX: number, coordY:number, virus:Vi, R: boolean) {
+    manualReset(coordX: number, coordY:number, virus:Vi, R: boolean, mitsu: number) {
         this.cells = new Array();
 
         this.date = 0;
@@ -71,9 +71,9 @@ export class CellMap {
             for (let x = 0; x < this.sides; x++) {
                 const c = new Cell(x, y);
                 if (coordX === x && coordY === y) {
-                    c.reset(1, virus);
+                    c.reset(1, virus, mitsu);
                 } else {
-                    c.reset(0, virus);
+                    c.reset(0, virus, mitsu);
                     if (R) c.currState = new StateR(0);
                 }
                 cellMap[y][x] = c;
